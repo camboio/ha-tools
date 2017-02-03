@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>can you dig it</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body ng-app="digApp" ng-controller="digController">
+   <div class="container">
+      <h1>dig.</h1>
+
+      <div class="row">
+      <div class="col-md-12">
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+            <pre style="height: 40vh;">{{ dug }}</pre>
+         </div>
+      </div>
+      </div>
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+         <input type="text" ng-model="dig" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="cambo.io a @8.8.8.8" />
+         </div>
+      </div>
+      </div>
+
+      </div>
+      </div>
+   </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
