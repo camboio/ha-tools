@@ -75,10 +75,34 @@ app.get('/had/*', function(req, res) {
    });
 
    tasks.push(function(callback){ // get domain mx records
-      exec('dig mx +short ' + domain, function(error, stdout, stderr){
+      dig('mx +short ' + domain, function(stdout){
          var raw = stdout.split(/\.\n/);
          raw.pop(); // last entry in this array is always empty
-         dict['mx'] = raw;
+         var mx = { 'record': [], 'priority': [], 'ip': [] };
+         for(var i = 0; i < raw.length; i++) {
+            var m = raw[i].split(/\s/);
+            mx['priority'][i] = m[0];
+            mx['record'][i] = m[1];
+         }
+         dict['mx'] = mx;
+         callback();
+      });
+   });
+
+   // add task to iterate through mx records and get ips for them
+
+   tasks.push(function(callback){ // get www cname and ip details
+      var dub = 'www.' + domain;
+      dig('+short ' + dub, function(stdout){
+         var cname = stdout.split(/\.?\n/);
+         dict['www'] = { 'cname' : "", 'ip': "" };
+         cname.pop(); // last entry in this array is always empty
+         if(cname.length > 1) { //if cname and ip
+            dict['www']['cname'] = cname[0];
+            dict['www']['ip'] = cname[1];
+         }else{
+            dict['www']['ip'] = cname[0];
+         }
          callback();
       });
    });
