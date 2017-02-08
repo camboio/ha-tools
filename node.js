@@ -10,17 +10,33 @@ app.use(cors(corsOptions));
 
 var exec = require('child_process').exec;
 
+var dig = function(args, callback){
+   var san = args.split(/\s/);
+   var query = "";
+   for (var i = 0; i < san.length; i++){
+      query += "'" + san[i] + "' ";
+   }
+   exec('dig ' + query, function(error, stdout, stderr){
+      callback(stdout);
+   });
+}
+
+var rdns = function(args, callback){
+   var query = "'" + args + "'"; //sanitise the input dog
+   exec('host ' + query + ' | grep -v "not found"', function(error, stdout, stderr){
+      if(stdout.length < 1) { callback(""); return; } // no rdns
+      var rdns = stdout.match(/([\w\.]+)\.\n$/); // just get the useful shit
+      callback(rdns[1]);
+   });
+}
+
 app.get('/', function(req, res){
    res.json("hello!");
 });
 
 app.get('/dig/*', function(req, res) {
-   var path = 'dig ' + req.params[0];
-   path = path.replace(/\//g, " ");
-   var san = path.split(/[^\w\.@\+]/);
-   exec(san[0], function(error, stdout, stderr){ 
-      res.json(stdout) 
-   });
+   var path = req.params[0].replace(/\//g, " ");
+   dig(path, function(stdout) { res.json(stdout); });
 });
 
 app.get('/whois/*', function(req, res) {
@@ -39,31 +55,18 @@ app.get('/had/*', function(req, res) {
    var dict = { 'domain': domain };
    var tasks= [];
 
-   tasks.push(function(callback){ // get domain ip address
-      exec('dig a +short ' + domain, function(error, stdout, stderr){
+   tasks.push(function(callback){ // get root ip and rdns details
+      dig('a +short ' + domain, function(stdout) {
          var ip = stdout.split(/\n/);
-         dict['ipaddr'] = ip[0];
-         callback();
+         rdns(ip[0], function(stdout) {
+            dict['root'] = { 'ip': ip[0], 'rdns': stdout };
+            callback();
+         });
       });
    });
 
-   tasks.push(function(callback){ // get rDNS for ip
-      async.until( //until the ip is set, wait a bit
-         function() { return dict.hasOwnProperty('ipaddr'); },
-         function(callback) { 
-            async.setImmediate(function() { callback(); }); 
-         },
-         function(err) {
-            exec('host ' + dict['ipaddr'] + ' | grep -v "not found"', function(error, stdout, stderr){
-               dict['rdns'] = stdout;
-               callback();
-            });
-         }
-      )
-   });
-
    tasks.push(function(callback){ // get domain ns records
-      exec('dig ns +short ' + domain + ' | sort', function(error, stdout, stderr){
+      dig('ns +short ' + domain + ' | sort', function(stdout){
          var raw = stdout.split(/\.\n/);
          var ns = [raw[0], raw[1]];
          dict['ns'] = ns;
