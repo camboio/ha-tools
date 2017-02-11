@@ -24,7 +24,28 @@
       <div class="row">
       <div class="col-md-10">
          <div class="form-group">
-            <pre style="height: 40vh;">{{ has }}</pre>
+         <div class="panel panel-default">
+            <div class="panel-body">
+
+<h2>{{ has.domain }} </h2>
+
+{{ has.domain }} | {{ has.root.ip }} | {{ has.root.rdns }} <br />
+
+www.{{ has.domain }} | {{ has.www.cname }} | {{ has.www.ip }} <br />
+
+mail.{{has.domain}} | {{ has.mail.cname }} | {{ has.mail.ip }} <br />
+
+<div ng-repeat="r in has.mx">
+{{ r.priority }} | {{ r.record }} | {{ r.ip }} 
+</div>
+
+<div ng-repeat="n in has.ns">
+Nameserver: {{ n }}
+</div>
+
+
+            </div>
+         </div>
          </div>
       </div>
       </div>
@@ -42,6 +63,7 @@
    </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -6,10 +6,20 @@ angular.module('hadApp', [])
       $http.get("http://cambo.io:3000/had/" + $scope.had)
       .then(function(response){ 
          var api = response.data;
-         console.log(api);
-         $scope.has = response.data;
+/*
+api = { 
+domain: 
+mail { cname: , ip: }
+mx [ { record: , priority: , ip: } ]
+ns[]
+root { ip: , rdns: }
+www { cname:  , ip: }
+}
+*/
+         $scope.has = api;
       });
    }
    });
+   $scope.had = 'cambo.io';
 });
 
