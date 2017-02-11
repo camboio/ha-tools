@@ -32,13 +32,13 @@ var digMX = function(args, callback){
    dig('mx +short ' + args, function(stdout) {
       var raw = stdout.split(/\.\n/);
       raw.pop(); // last entry in this array is always empty
-      var mx = { 'record': [], 'priority': [], 'ip': [] };
+      var mx = [];
       async.times(raw.length, function(n, next){
          var m = raw[n].split(/\s/);
-         mx['priority'][n] = m[0];
-         mx['record'][n] = m[1];
+         var x = { 'record': m[1], 'priority': m[0], 'ip': "" };
          digA(m[1], function(mxip) {
-            mx['ip'][n] = mxip;
+            x['ip'] = mxip;
+            mx.push(x);
             next();
          });
       }, function(err, etc) {
