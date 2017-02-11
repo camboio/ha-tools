@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>hosting australia dig</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body ng-app="hadApp" ng-controller="hadController">
+   <div class="container">
+      <h1>had.</h1>
+
+      <div class="row">
+      <div class="col-md-12">
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+            <pre style="height: 40vh;">{{ has }}</pre>
+         </div>
+      </div>
+      </div>
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+         <input type="text" ng-model="had" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="hostingaustralia.com.au" />
+         </div>
+      </div>
+      </div>
+
+      </div>
+      </div>
+   </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
