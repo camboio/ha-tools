@@ -1,0 +1,46 @@
+   <div class="container">
+      <h1>had.</h1>
+
+      <div class="row">
+      <div class="col-md-12">
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+         <div class="panel panel-default">
+            <div class="panel-body" ng-if="has.hasOwnProperty('domain');">
+
+<h2>{{ has.domain }} </h2>
+
+{{ has.domain }} | {{ has.root.ip }} | {{ has.root.rdns }} <br />
+
+www.{{ has.domain }} | {{ has.www.cname }} | {{ has.www.ip }} <br />
+
+mail.{{has.domain}} | {{ has.mail.cname }} | {{ has.mail.ip }} <br />
+
+<div ng-repeat="r in has.mx">
+{{ r.priority }} | {{ r.record }} | {{ r.ip }} 
+</div>
+
+<div ng-repeat="n in has.ns">
+Nameserver: {{ n }}
+</div>
+
+
+            </div>
+         </div>
+         </div>
+      </div>
+      </div>
+
+      <div class="row">
+      <div class="col-md-10">
+         <div class="form-group">
+         <input type="text" ng-model="had" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="hostingaustralia.com.au" />
+         </div>
+      </div>
+      </div>
+
+      </div>
+      </div>
+   </div>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 
+   <base href="/had/">
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,54 +15,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </head>
-<body ng-app="hadApp" ng-controller="hadController">
-   <div class="container">
-      <h1>had.</h1>
-
-      <div class="row">
-      <div class="col-md-12">
-
-      <div class="row">
-      <div class="col-md-10">
-         <div class="form-group">
-         <div class="panel panel-default">
-            <div class="panel-body">
-
-<h2>{{ has.domain }} </h2>
-
-{{ has.domain }} | {{ has.root.ip }} | {{ has.root.rdns }} <br />
-
-www.{{ has.domain }} | {{ has.www.cname }} | {{ has.www.ip }} <br />
-
-mail.{{has.domain}} | {{ has.mail.cname }} | {{ has.mail.ip }} <br />
-
-<div ng-repeat="r in has.mx">
-{{ r.priority }} | {{ r.record }} | {{ r.ip }} 
+<body ng-app="hadApp">
+<div ng-view>
 </div>
-
-<div ng-repeat="n in has.ns">
-Nameserver: {{ n }}
-</div>
-
-
-            </div>
-         </div>
-         </div>
-      </div>
-      </div>
-
-      <div class="row">
-      <div class="col-md-10">
-         <div class="form-group">
-         <input type="text" ng-model="had" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="hostingaustralia.com.au" />
-         </div>
-      </div>
-      </div>
-
-      </div>
-      </div>
-   </div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.min.js"></script>
 <script src="http://cambo.io/res/had/app.js"></script>
