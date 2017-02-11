@@ -2,11 +2,13 @@ var express = require('express');
 var app = express();
 var cors = require('cors');
 var async = require('async');
+var path = require('path');
 
 var corsOptions = {
 origin: 'http://cambo.io'
 }
 app.use(cors(corsOptions));
+app.use('/res', express.static(path.join(__dirname)));
 
 var exec = require('child_process').exec;
 
@@ -66,15 +68,23 @@ var digC = function(args, callback){
 }
 
 app.get('/', function(req, res){
-   res.json("hello!");
+   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get('/dig/*', function(req, res) {
+app.get('/dig/*', function(req, res){
+   res.sendFile(path.join(__dirname + '/dig/index.html'));
+});
+
+app.get('/had/*', function(req, res){
+   res.sendFile(path.join(__dirname + '/had/index.html'));
+});
+
+app.get('/api/dig/*', function(req, res) {
    var path = req.params[0].replace(/\//g, " ");
    dig(path, function(stdout) { res.json(stdout); });
 });
 
-app.get('/whois/*', function(req, res) {
+app.get('/api/whois/*', function(req, res) {
    var domain = req.params[0];
    domain  = domain.split(/[^\w\.]/);
    exec('whois ' + domain[0], function(error, stdout, stderr){
@@ -82,7 +92,7 @@ app.get('/whois/*', function(req, res) {
    });
 });
 
-app.get('/had/*', function(req, res) {
+app.get('/api/had/*', function(req, res) {
    var domain = req.params[0]
    domain = domain.split(/[^\w\.]/);
    domain = domain[0];
