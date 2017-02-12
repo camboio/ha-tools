@@ -50,8 +50,7 @@ var digMX = function(args, callback){
 }
 
 var rdns = function(args, callback){
-   var query = "'" + args + "'"; //sanitise the input dog
-   exec('host ' + query + ' | grep -v "not found"', function(error, stdout, stderr){
+   exec('host ' + args + ' | grep -v "not found" | grep -v "no PTR"', function(error, stdout, stderr){
       if(stdout.length < 1) { callback(""); return; } // no rdns
       var rdns = stdout.match(/([\w\.-]+)\.\n$/); // just get the useful shit
       callback(rdns[1]);
@@ -149,6 +148,14 @@ app.get('/api/had/*', function(req, res) {
          }else{
             dict['mail']['ip'] = stdout[0];
          }
+         callback();
+      });
+   });
+
+   tasks.push(function(callback){ //get root ip from ha ns
+      var arg = domain + ' @ns1.hostingaustralia.com.au';
+      digA(arg, function(stdout) {
+         dict['ha'] = stdout;
          callback();
       });
    });
