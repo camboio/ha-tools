@@ -14,6 +14,11 @@ angular.module('hadApp', ['ngRoute'])
 })
 
 .controller('hadController', function($scope, init, $http, $location, $route, $routeParams){
+   $scope.webDetail = true;
+   $scope.webSwitch = function() { $scope.webDetail = !$scope.webDetail; }
+   $scope.emailDetail = true;
+   $scope.emailSwitch = function () { $scope.emailDetail = !$scope.emailDetail; }
+ 
    if(init.hasOwnProperty('domain')) {   
       $http.get("http://cambo.io/api/had/" + init.domain)
       .then(function(response){
@@ -25,12 +30,14 @@ angular.module('hadApp', ['ngRoute'])
          var web = $scope.verify.root.ip + $scope.verify.ha;
          $scope.verify.web = (web == 0) ? 'danger' : ((web > 5) ? 'success':'warning');
 
-         $scope.verify.mail.ip = ($scope.has.mail.ip.match(/^103\.223\.18.*$/) !== null) ? 5:0;
+         $scope.verify.mail.ip = ($scope.has.mail.hasOwnProperty('ip') && 
+                                  $scope.has.mail.ip.match(/^103\.223\.18.*$/) !== null) ? 5:0;
          $scope.verify.mx = ($scope.has.mx[0].ip.match(/^103\.223\.18.*$/) !== null) ? 5:0;
          $scope.verify.spam = ($scope.has.mx[0].record.match(/.*spamexperts.*/) !== null) ? 5:0;
+         $scope.verify.spam += ($scope.has.mx[0].record.match(/.*outlook.*/i) !== null) ? -5:0;
+         $scope.verify.spam += ($scope.has.mx[0].record.match(/.*google.*/i) !== null) ? -5:0;
          var mail = $scope.verify.mail.ip + $scope.verify.mx + $scope.verify.spam;
          $scope.verify.email = (mail == 0) ? 'danger' : ((mail > 5) ? 'success':'warning');
-
       }); 
    }else{ }
 

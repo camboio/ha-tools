@@ -9,43 +9,73 @@
          <div class="form-group">
          <div class="panel panel-default">
             <div class="panel-heading"><h3 class="panel-title">{{ has.domain }}</h3></div>
-            <div class="panel-body small" ng-if="has.hasOwnProperty('domain');">
-
-<div class="panel panel-{{ verify.web }}">
-<div class="panel-heading"><span class="glyphicon glyphicon-cloud"></span></div>
-<div class="panel-body">
-
-<div class="row">
-<div class="col-sm-4 text-right"> {{ has.domain }} </div>
-<div class="col-sm-4 text-right"> {{ has.root.ip }} </div>
-<div class="col-sm-4 text-right"> {{ has.root.rdns }} </div>
+            <div class="panel-body" ng-if="has.hasOwnProperty('domain');">
+<div class="row"><div class="col-sm-4">
+<div ng-switch="webDetail" ng-click="webSwitch()" class="btn btn-circle-lg btn-{{ verify.web }}"> 
+<div ng-switch-when="true" class="circle-text">
+   <div ng-switch on="verify.web" class="row" style="font-size: 400%;">
+      <span ng-switch-when="success" class="glyphicon glyphicon-ok-sign"></span>
+      <span ng-switch-when="warning" class="glyphicon glyphicon-question-sign"></span>
+      <span ng-switch-when="danger" class="glyphicon glyphicon-remove-sign"></span>
+   </div>
+   <div class="row" style="font-size: 125%;">
+ {{ has.domain }}
+   </div>
+   <div class="row">
+ {{ has.root.ip }}
+   </div>
 </div>
 
-<div class="row">
-<div class="col-sm-4 text-right"> www.{{ has.domain }} </div>
-<div class="col-sm-4 text-right"> {{ has.www.ip }} </div>
-<div class="col-sm-4 text-right"> {{ has.www.cname }} </div>
+<div ng-switch-when="false" class="circle-text" style="width: 60%;">
+   <div class="row">
+      <span class="glyphicon glyphicon-cloud"></span>
+   </div>
+   <div class="row">
+      {{ has.domain }}
+   </div>
+   <div class="row">
+      {{ has.root.ip }}
+   </div>
+   <div ng-if="has.root.rdns.length > 0" class="row" style="font-size: 75%;">
+      ({{ has.root.rdns }})
+   </div>
+   <div class="row">---</div>
+   <div class="row">
+      www.{{ has.domain }}
+   </div>
+   <div class="row">
+      {{ has.www.ip }}
+   </div>
+   <div ng-if="has.www.cname.length > 0" class="row">
+      ({{ has.www.cname }})
+   </div>
 </div>
 
 </div>
 </div>
+<div class="col-sm-4">
+   <div ng-switch="emailDetail" ng-click="emailSwitch()" class="btn btn-circle-lg btn-{{ verify.email }}">
+   <div ng-switch-when="true" class="circle-text">
+      <div ng-switch="verify.email" class="row" style="font-size: 400%;">
+         <span ng-switch-when="success" class="glyphicon glyphicon-ok-sign"></span>
+         <span ng-switch-when="warning" class="glyphicon glyphicon-question-sign"></span>
+         <span ng-switch-when="danger" class="glyphicon glyphicon-remove-sign"></span>
+      </div>
+      <div class="row">
+         {{ has.mx[0].record }}
+      </div>
+   </div>
 
-<div class="panel panel-{{ verify.email }}">
-<div class="panel-heading"><span class="glyphicon glyphicon-envelope"></span></div>
-<div class="panel-body">
-
-<div class="row">
-<div class="col-sm-4 text-right"> mail.{{ has.domain }} </div>
-<div class="col-sm-4 text-right"> {{ has.mail.ip }} </div>
-<div class="col-sm-4 text-right"> {{ has.mail.cname }} </div>
-</div>
-
-<div class="row" ng-repeat="r in has.mx">
-<div class="col-sm-4 text-right"> MX ({{ r.priority }}) </div>
-<div class="col-sm-4 text-right"> {{ r.record }} </div> 
-<div class="col-sm-4 text-right"> {{ r.ip }} </div>
-</div>
-
+   <div ng-switch-when="false" class="circle-text" style="width: 50%;">
+      <div class="row">
+         <span class="glyphicon glyphicon-inbox" style="font-size: 150%"></span>
+      </div>
+      <div class="row" ng-repeat="r in has.mx">
+         <div class="row" style="font-size: {{ 100 - (5 * has.mx.length) }}%;"> {{ r.record }} </div>
+         <div class="row" style="font-size: {{ 95 - (5 * has.mx.length) }}%;"> ({{ r.priority }}) {{ r.ip }} </div>
+      </div>
+   </div>
+   </div>
 </div>
 </div>
 
