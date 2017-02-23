@@ -93,7 +93,7 @@ app.get('/api/whois/*', function(req, res) {
 
 app.get('/api/had/*', function(req, res) {
    var domain = req.params[0]
-   domain = domain.split(/[^\w\.]/);
+   domain = domain.split(/[^\w\.-]/);
    domain = domain[0];
 
    var dict = { 'domain': domain };
