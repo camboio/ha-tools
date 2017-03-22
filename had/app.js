@@ -46,6 +46,7 @@ angular.module('hadApp', ['ngRoute'])
          var mail = $scope.verify.mail.ip + $scope.verify.mx + $scope.verify.spam;
          $scope.verify.email = (mail <= 0) ? 'danger' : ((mail > 5) ? 'success':'warning');
       }); 
+      $scope.had = init.domain;
    }else{ }
 
    $scope.$watch('had', function() {
