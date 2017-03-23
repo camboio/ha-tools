@@ -32,21 +32,32 @@
                      <div class="margin10" ng-repeat="n in has.ns">
                         {{ n }}
                      </div>
+                     <div class="margin10" ng-if="has.whois == undefined">
+                        <i class="fa fa-search"></i>
+                        (<a ng-click="whois(has.domain)">Whois?</a>)
+                     </div>
+                     <div class="margin10" ng-if="has.whois !== undefined">
+                        <pre>{{ has.whois }}</pre>
+                     </div>
                 </div>
             </div>
          </div>
 
          <div class="row">
             <div class="col-sm-2">
-               <div class="btn btn-circle-lg btn-{{ verify.web }}">
+               <div class="btn btn-circle-lg btn-{{ verify(has.verify.webscore) }}">
                   <i class="fa fa-link"></i>
                </div>
             </div>
             <div class="col-sm-10">
-               <div class="panel panel-{{ verify.web }}">
+               <div class="panel panel-{{ verify(has.verify.webscore) }}">
                   <div class="panel-heading">
                      <h3 class="panel-title">
                         Website Hosting
+                        <i class="fa fa-check-circle-o" title="A record points to our IP range" ng-if="has.verify.root_ip_match > 0"></i>
+                        <i class="fa fa-circle-o" title="A record does not point to our IP range" ng-if="has.verify.root_ip_match <= 0"></i>
+                        <i class="fa fa-check-circle-o" title="A DNS zone exists for this domain in our cluster" ng-if="has.verify.has_ha_zone > 0"></i>
+                        <i class="fa fa-circle-o" title="A DNS zone does not exist for this domain in our cluster" ng-if="has.verify.has_ha_zone <= 0"></i>
                      </h3>
                   </div>
                   <div class="margin10">
@@ -65,15 +76,22 @@
 
          <div class="row">
             <div class="col-sm-2">
-               <div class="btn btn-circle-lg btn-{{ verify.email }}">
+               <div class="btn btn-circle-lg btn-{{ verify(has.verify.mailscore) }}">
                   <i class="fa fa-envelope-open-o"></i>
                </div> 
             </div>
             <div class="col-sm-10">
-               <div class="panel panel-{{ verify.email }}">
+               <div class="panel panel-{{ verify(has.verify.mailscore) }}">
                   <div class="panel-heading">
                      <h3 class="panel-title">
                         Email Hosting
+                        <i class="fa fa-check-circle-o" title="mail.{{ has.domain}} points to our IP range" ng-if="has.verify.mail_ip_match > 0"></i>
+                        <i class="fa fa-circle-o" title="mail.{{ has.domain}} does not point to our IP range" ng-if="has.verify.mail_ip_match <= 0"></i>
+                        <i class="fa fa-check-circle-o" title="MX record points to our IP range" ng-if="has.verify.mx_ip_match > 0"></i>
+                        <i class="fa fa-circle-o" title="MX record does not point to our IP range" ng-if="has.verify.mx_ip_match <= 0"></i>
+                        <i class="fa fa-trash-o" title="MX record points to SpamExperts" ng-if="has.verify.mx_spamexperts > 0"></i>
+                        <i class="fa fa-windows" title="MX record points to Outlook" ng-if="has.verify.mx_outlook > 0"></i>
+                        <i class="fa fa-chrome" title="MX record points to Google" ng-if="has.verify.mx_google > 0"></i>
                      </h3>
                   </div>
                   <div class="margin10" ng-repeat="r in has.mx">

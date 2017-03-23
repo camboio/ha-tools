@@ -4,13 +4,18 @@ var cors = require('cors');
 var async = require('async');
 var path = require('path');
 
-var corsOptions = {
-origin: 'http://cambo.io'
-}
+var corsOptions = { origin: 'http://cambo.io' }
 app.use(cors(corsOptions));
+
 app.use('/res', express.static(path.join(__dirname)));
 
 var exec = require('child_process').exec;
+
+var whois = function(args, callback){
+   exec('whois "' + args + '"', function(error, stdout, stderr){
+      callback(stdout);
+   });
+}
 
 var dig = function(args, callback){
    var san = args.split(/\s/);
@@ -78,17 +83,28 @@ app.get('/had/*', function(req, res){
    res.sendFile(path.join(__dirname + '/had/index.html'));
 });
 
+app.get('/had', function(req, res){
+   res.redirect("/had/");
+});
+
 app.get('/api/dig/*', function(req, res) {
    var path = req.params[0].replace(/\//g, " ");
    dig(path, function(stdout) { res.json(stdout); });
 });
 
+/*
 app.get('/api/whois/*', function(req, res) {
    var domain = req.params[0];
    domain  = domain.split(/[^\w\.]/);
    exec('whois ' + domain[0], function(error, stdout, stderr){
       res.json(stdout);
    });
+});
+*/
+
+app.get('/api/whois/*', function(req, res) {
+   var domain = req.params[0];
+   whois(domain, function(stdout) { res.json(stdout); });
 });
 
 app.get('/api/had/*', function(req, res) {
@@ -161,6 +177,17 @@ app.get('/api/had/*', function(req, res) {
    });
 
    async.parallel(tasks, function(){ // execute async tasks and return dict object
+
+      var verify = {};
+      verify['root_ip_match'] = (dict['root']['ip'].match(/^(?:103|221)\.(?:223|121)\.(?:18|140).*$/) !== null) ? 7:0;
+      verify['has_ha_zone'] = (dict['ha'].length > 0) ? 5:0;
+      verify['mail_ip_match'] = (dict['mail'].hasOwnProperty('ip') && dict['mail']['ip'].match(/^(?:103|221)\.(?:223|121)\.(?:18|140).*$/) !== null) ? 5:0;
+      verify['mx_ip_match'] = (dict['mx'][0]['ip'].match(/^(?:103|221)\.(?:223|121)\.(?:18|140).*$/) !== null) ? 7:0;
+      verify['mx_spamexperts'] = (dict['mx'][0]['record'].match(/.*spamexperts.*/i) !== null) ? 5:0;
+      verify['mx_outlook'] = (dict['mx'][0]['record'].match(/.*outlook.*/i) !== null) ? 5:0;
+      verify['mx_google'] = (dict['mx'][0]['record'].match(/.*google.*/i) !== null) ? 5:0;
+
+      dict['verify'] = verify;
       res.json(dict);
    });
 
