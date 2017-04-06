@@ -1,6 +1,6 @@
 <div class="container">
-   <div class="row">
-      <hr />
+   <div class="page-header">
+     <a style="text-decoration: none !important; color: black" href="//cambo.io"><h1>cambo.io</h1></a>
    </div>
    <div class="row">
       <div class="col-sm-4">
@@ -11,6 +11,11 @@
             <input type="text" ng-model="had" ng-model-options="{ debounce: 500 }" class="form-control" placeholder="{{ has.domain }}" />
          </div>
       </div>
+   </div>
+
+   <div class="row text-center" style="margin-top: 20px;"  ng-if="domain && !has.hasOwnProperty('domain')">
+      <i class="fa fa-cog fa-spin fa-4x fa-fw"></i>
+      <span class="sr-only">Loading...</span>
    </div>
 
    <div class="row" ng-if="has.hasOwnProperty('domain');">
@@ -29,7 +34,7 @@
                            Nameservers
                         </h3>
                      </div>
-                     <div class="margin10" ng-repeat="n in has.ns">
+                     <div class="margin10" ng-repeat="n in has.ns" ng-if="has.whois == undefined">
                         {{ n }}
                      </div>
                      <div class="margin10" ng-if="has.whois == undefined">

@@ -16,6 +16,7 @@ angular.module('hadApp', ['ngRoute'])
 .controller('hadController', function($scope, init, $http, $location, $route, $routeParams){
  
    if(init.hasOwnProperty('domain')) {   
+      $scope.domain = init.domain;
       $http.get("http://cambo.io/api/had/" + init.domain)
       .then(function(response){
          $scope.has = response.data;

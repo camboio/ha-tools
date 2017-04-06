@@ -1,0 +1,79 @@
+<div class="container">
+   <div class="page-header">
+     <a style="text-decoration: none !important; color: black" href="//cambo.io"><h1>cambo.io</h1></a>
+   </div>
+   <div class="row">
+      <div class="col-sm-4">
+         <h4>letc.</h4>
+      </div>
+      <div class="col-sm-8">
+         <div class="form-group">
+            <input type="text" ng-model="letc" ng-model-options="{ debounce: 500 }" class="form-control" placeholder="{{ domain }}" />
+         </div>
+      </div>
+   </div>
+   <div class="row text-center" style="margin-top: 20px;"  ng-if="domain && !results.hasOwnProperty('verify')">
+      <i class="fa fa-cog fa-spin fa-4x fa-fw"></i>
+      <span class="sr-only">Loading...</span>
+   </div>
+
+   <div class="row" ng-if="results.hasOwnProperty('verify')">
+      <div class="col-md-12">
+
+         <div class="row">
+            <div class="col-sm-2">
+               <div class="btn btn-circle-lg btn-{{ (results.verify.total > 0) ? 'success' : 'danger' }}">
+                  <i class="fa fa-link"></i>
+               </div>
+            </div>
+            <div class="col-sm-10">
+               <div class="panel panel-{{ (results.verify.total > 0) ? 'success' : 'danger'  }}">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">
+                        Website
+                        <i class="fa fa-check-circle-o" title="Server returns 301 on {{ domain }}:2083" ng-if="results.verify.connect_2083 > 0"></i>
+                        <i class="fa fa-circle-o" title="Server doesn't connect on port 2083" ng-if="results.verify.connect_2083 == 0"></i>
+                        <i class="fa fa-check-circle-o" title="Server returns 301 on {{ domain }}/cpanel" ng-if="results.verify.connect_slash_cpanel > 0"></i>
+                        <i class="fa fa-circle-o" title="Server returns error on {{ domain }}/cpanel" ng-if="results.verify.connect_slash_cpanel == 0"></i>
+                        <i class="fa fa-check-circle-o" title="Server returns 301 on cpanel.{{ domain }}" ng-if="results.verify.connect_cpanel_dot > 0"></i>
+                        <i class="fa fa-circle-o" title="Server returns error on cpanel.{{ domain }}" ng-if="results.verify.connect_cpanel_dot == 0"></i>
+                     </h3>
+                  </div>
+                  <div class="panel-body">
+                     <div class="margin10">
+                        <strong>{{ domain }}</strong> is <i>probably</i> <i ng-if="results.verify.total == 0">not</i> hosted on a cPanel.
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-sm-2">
+               <div class="btn btn-circle-lg btn-{{ (results.verify.connect_mx > 0) ? 'success' : 'danger' }}">
+                  <i class="fa fa-envelope-open-o"></i>
+               </div> 
+            </div>
+            <div class="col-sm-10">
+               <div class="panel panel-{{ (results.verify.connect_mx > 0) ? 'success' : 'danger' }}">
+                  <div class="panel-heading">
+                     <h3 class="panel-title">
+                        Email Hosting
+                        <i class="fa fa-check-circle-o" title="Server returns 301 on {{ domain }}'s MX record on port 2083" ng-if="results.verify.connect_mx > 0"></i>
+                        <i class="fa fa-circle-o" title="Server doesn't connect on {{ domain }}'s MX record on port 2083" ng-if="results.verify.connect_mx == 0"></i>
+                     </h3>
+                  </div>
+                  <div class="panel-body">
+                     <div class="margin10">
+                        Mail for <strong>{{ domain }}</strong> is <i>probably</i> <i ng-if="results.verify.connect_mx == 0">not</i> hosted on a cPanel.
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </div>
+   </div>
+
+</div>
