@@ -4,6 +4,11 @@ var path = require('path');
 var dig = require('../functions');
 var async = require('async');
 
+app.get('/api/whois/*', function(req, res) {
+   var domain = req.params[0];
+   dig.whois(domain, function(stdout) { res.json(stdout); });
+});
+
 app.get('/api/*', function(req, res) {
    var domain = req.params[0]
    domain = domain.split(/[^\w\.-]/);
@@ -89,11 +94,6 @@ app.get('/api/*', function(req, res) {
       res.json(dict);
    });
 
-});
-
-app.get('/api/whois/*', function(req, res) {
-   var domain = req.params[0];
-   dig.whois(domain, function(stdout) { res.json(stdout); });
 });
 
 app.get('/*', function(req, res){
